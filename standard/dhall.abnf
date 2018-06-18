@@ -348,6 +348,7 @@ import-alt    = "?"  whitespace
 
 combine       = ( %x2227 / "/\"                ) whitespace
 combine-types = ( %x2A53 / "//\\"              ) whitespace
+combine-types-non-recursive = ( %x2A5FB / "///") whitespace
 prefer        = ( %x2AFD / "//"                ) whitespace
 extend-types  = ( "\\\"                        ) whitespace ; There is no unicode triple reverse solidus
 lambda        = ( %x3BB  / "\"                 ) whitespace
@@ -609,19 +610,20 @@ non-empty-optional = expression close-bracket colon Optional import-expression
 
 operator-expression = import-alt-expression
 
-import-alt-expression    = or-expression            *(import-alt    or-expression)
-or-expression            = plus-expression          *(or            plus-expression         )
-plus-expression          = text-append-expression   *(plus          text-append-expression  )
-text-append-expression   = list-append-expression   *(text-append   list-append-expression  )
-list-append-expression   = and-expression           *(list-append   and-expression          )
-and-expression           = combine-expression       *(and           combine-expression      )
-combine-expression       = prefer-expression        *(combine       prefer-expression       )
-prefer-expression        = extend-types-expression  *(prefer        extend-types-expression)
-extend-types-expression  = combine-types-expression *(extend-types  combine-types-expression)
-combine-types-expression = times-expression         *(combine-types times-expression        )
-times-expression         = equal-expression         *(times         equal-expression        )
-equal-expression         = not-equal-expression     *(double-equal  not-equal-expression    )
-not-equal-expression     = application-expression   *(not-equal     application-expression  )
+import-alt-expression    = or-expression               *(import-alt    or-expression                 )
+or-expression            = plus-expression             *(or            plus-expression               )
+plus-expression          = text-append-expression      *(plus          text-append-expression        )
+text-append-expression   = list-append-expression      *(text-append   list-append-expression        )
+list-append-expression   = and-expression              *(list-append   and-expression                )
+and-expression           = combine-expression          *(and           combine-expression            )
+combine-expression       = prefer-expression           *(combine       prefer-expression             )
+prefer-expression        = extend-types-expression     *(prefer        extend-types-expression       )
+extend-types-expression  = combine-types-nr-expression *(extend-types  combine-types-nr-expression   )
+combine-types-nr-expression = times-expression         *(combine-types-non-recursive times-expression)
+combine-types-expression = times-expression            *(combine-types times-expression              )
+times-expression         = equal-expression            *(times         equal-expression              )
+equal-expression         = not-equal-expression        *(double-equal  not-equal-expression          )
+not-equal-expression     = application-expression      *(not-equal     application-expression        )
 
 ; Import expressions need to be separated by some whitespace, otherwise there
 ; would be ambiguity: `./ab` could be interpreted as "import the file `./ab`",

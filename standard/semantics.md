@@ -2609,6 +2609,35 @@ from the left record:
     ─────────────────   ; If no other rule matches
     l₀ ⫽ r₀ ⇥ l₁ ⫽ r₁
 
+Record type merge combines two record types. Any field collisions are resolved by
+preferring the field from the right record and discarding the colliding field from the
+second record:
+
+    l ⇥ {}   r₀ ⇥ r₁
+    ────────────────
+    l ⫻ r₀ ⇥ r₁
+
+
+    r ⇥ {}   l₀ ⇥ l₁
+    ────────────────
+    l₀ ⫻ r ⇥ l₁
+
+
+    ls₀ ⇥ { x : l₁, ls₁… }
+    rs₀ ⇥ { x : r₁, rs₁… }
+    { ls₁… } ⫻ { rs₁… } ⇥ { ts… }
+    ─────────────────────────────
+    ls₀ ⫻ rs₀ ⇥ { x : t, ts… }
+
+
+    ls₀ ⇥ { x : l₁, ls₁… }   { ls₁… } ⫻ rs ⇥ { ls₂… }
+    ─────────────────────────────────────────────────  ; x ∉ rs
+    ls₀ ⫻ rs ⇥ { x : l₁, ls₂… }
+
+
+    l₀ ⇥ l₁   r₀ ⇥ r₁
+    ─────────────────   ; If no other rule matches
+    l₀ ⫻ r₀ ⇥ l₁ ⫻ r₁
 
 Recursive record type merge combines two record types, recursively merging any
 fields that collide.  The type system ensures that colliding fields must be
